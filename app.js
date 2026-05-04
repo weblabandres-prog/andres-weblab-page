@@ -18,11 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const yearEl = document.getElementById("year");
   const contactForm = document.getElementById("contactForm");
   const whatsappFloat = document.querySelector(".whatsapp-float");
+  const whatsappIntentLinks = document.querySelectorAll("[data-whatsapp-message]");
   const revealElements = document.querySelectorAll(".reveal");
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   let lastFocusedElement = null;
+  let tickingScrollState = false;
 
   const buildWhatsappUrl = (message) => {
     const cleanNumber = WHATSAPP_NUMBER.replace(/\D/g, "");
@@ -173,6 +175,34 @@ document.addEventListener("DOMContentLoaded", () => {
     whatsappFloat.setAttribute("aria-label", "Escribir por WhatsApp");
   }
 
+  const updateScrollState = () => {
+    body.classList.toggle("has-scrolled", window.scrollY > 360);
+    tickingScrollState = false;
+  };
+
+  updateScrollState();
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (tickingScrollState) return;
+
+      tickingScrollState = true;
+      window.requestAnimationFrame(updateScrollState);
+    },
+    { passive: true }
+  );
+
+  whatsappIntentLinks.forEach((link) => {
+    const message = link.getAttribute("data-whatsapp-message");
+
+    if (!message) return;
+
+    link.href = buildWhatsappUrl(message);
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+
   if (contactForm) {
     contactForm.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -233,7 +263,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const sections = Array.from(document.querySelectorAll("main section[id], .hero[id]"));
+  const sections = Array.from(desktopNavLinks)
+    .map((link) => {
+      const href = link.getAttribute("href");
+
+      if (!href || !href.startsWith("#")) return null;
+
+      return document.getElementById(href.slice(1));
+    })
+    .filter(Boolean);
 
   if ("IntersectionObserver" in window && sections.length && desktopNavLinks.length) {
     const sectionObserver = new IntersectionObserver(
