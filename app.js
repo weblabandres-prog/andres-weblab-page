@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "18098937371";
+const WHATSAPP_NUMBER = "18296431565";
 
 const DEFAULT_WHATSAPP_MESSAGE =
   "Hola, vi tu página web y quiero información sobre una página web para mi negocio.";
