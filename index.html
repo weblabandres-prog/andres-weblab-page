@@ -10,9 +10,38 @@
   <meta name="theme-color" content="#03070d" />
   <meta name="author" content="Jonathan Andres" />
   <meta name="robots" content="index, follow" />
+  <meta name="format-detection" content="telephone=no" />
 
+  <meta property="og:title" content="Andres WebLab | Páginas web modernas para negocios" />
+  <meta property="og:description" content="Diseño y desarrollo de páginas web modernas, rápidas y listas para convertir visitas en clientes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_DO" />
+  <meta property="og:image" content="portfolio-weblab-showcase.jpg" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Andres WebLab | Páginas web modernas para negocios" />
+  <meta name="twitter:description" content="Sitios web profesionales para negocios que quieren verse mejor y vender con más confianza." />
+  <meta name="twitter:image" content="portfolio-weblab-showcase.jpg" />
+
+  <link rel="icon" href="logo.jfif" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <script src="app.js" defer></script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Andres WebLab",
+      "description": "Diseño y desarrollo de páginas web modernas para negocios.",
+      "email": "weblabandres@gmail.com",
+      "telephone": "+1-809-893-7371",
+      "areaServed": "República Dominicana",
+      "sameAs": ["https://instagram.com/andresweblab"]
+    }
+  </script>
 </head>
 
 <body>
@@ -34,6 +63,7 @@
         <a href="#inicio" class="is-active" aria-current="page">Inicio</a>
         <a href="#servicios">Servicios</a>
         <a href="#proyecto">Proyectos</a>
+        <a href="#confianza">Resultados</a>
         <a href="#proceso">Proceso</a>
         <a href="#paquetes">Paquetes</a>
         <a href="#faq">FAQ</a>
@@ -79,6 +109,7 @@
           <a href="#inicio" class="mobile-link">Inicio</a>
           <a href="#servicios" class="mobile-link">Servicios</a>
           <a href="#proyecto" class="mobile-link">Proyectos</a>
+          <a href="#confianza" class="mobile-link">Resultados</a>
           <a href="#proceso" class="mobile-link">Proceso</a>
           <a href="#paquetes" class="mobile-link">Paquetes</a>
           <a href="#faq" class="mobile-link">FAQ</a>
@@ -93,23 +124,22 @@
     <section class="hero" id="inicio">
       <div class="container hero-grid">
         <div class="hero-content reveal">
-          <span class="eyebrow">DISEÑO WEB QUE CONVIERTE</span>
+          <span class="eyebrow">DISEÑO WEB PARA NEGOCIOS QUE QUIEREN VENDER</span>
 
           <h1>
-            Páginas web modernas que hacen
-            <span>crecer tu negocio</span>
+            Haz que tu negocio se vea profesional
+            <span>y reciba más mensajes</span>
           </h1>
 
           <p>
-            Diseño y desarrollo de sitios web rápidos, atractivos y pensados
-            para generar resultados reales. Tu marca se verá más seria,
-            profesional y lista para vender.
+            Diseño páginas web rápidas, elegantes y pensadas para que una persona entienda
+            qué ofreces, confíe en tu marca y te escriba por WhatsApp sin perder tiempo.
           </p>
 
           <div class="hero-actions">
             <a href="#contacto" class="btn btn-primary">
-              Quiero mi página
-              <span>→</span>
+              Quiero cotizar mi web
+              <span aria-hidden="true">→</span>
             </a>
 
             <a href="#proyecto" class="btn btn-secondary">
@@ -119,77 +149,56 @@
 
           <div class="hero-features">
             <span>Diseño personalizado</span>
-            <span>Web 100% responsive</span>
-            <span>Optimizado y rápido</span>
+            <span>WhatsApp listo para vender</span>
+            <span>Web rápida y responsive</span>
+          </div>
+
+          <div class="hero-stats" aria-label="Puntos fuertes del servicio">
+            <article>
+              <strong>7-14</strong>
+              <span>días estimados</span>
+            </article>
+
+            <article>
+              <strong>100%</strong>
+              <span>adaptada a celular</span>
+            </article>
+
+            <article>
+              <strong>1:1</strong>
+              <span>atención directa</span>
+            </article>
           </div>
         </div>
 
         <div class="hero-visual reveal">
-          <div class="preview-card">
-            <div class="preview-top">
-              <div class="preview-brand">
-                <span class="logo-mark logo-mark-small" aria-hidden="true">
-                  <i></i>
-                  <i></i>
-                  <i></i>
-                </span>
+          <figure class="hero-showcase">
+            <img src="portfolio-weblab-showcase.jpg" alt="Página web premium creada por Andres WebLab mostrada en una laptop" />
 
-                <strong>
-                  ANDRES<br />
-                  WEBLAB
-                </strong>
-              </div>
+            <figcaption>
+              <strong>Diseño premium con estructura comercial</strong>
+              <span>Servicios claros, CTA visible y experiencia adaptable a celular.</span>
+            </figcaption>
 
-              <div class="preview-links">
-                <span>Inicio</span>
-                <span>Servicios</span>
-                <span>Proyectos</span>
-                <span>Contacto</span>
-              </div>
-
-              <button type="button">Cotizar proyecto</button>
+            <div class="showcase-badge showcase-badge-top">
+              <strong>WhatsApp</strong>
+              <span>contacto listo</span>
             </div>
 
-            <div class="preview-hero">
-              <div class="preview-copy">
-                <h2>
-                  IMPULSA
-                  <span>TU MARCA</span>
-                  AL SIGUIENTE NIVEL
-                </h2>
-
-                <p>Diseño moderno para marcas que quieren verse premium.</p>
-              </div>
-
-              <div class="laptop-art">
-                <div class="screen-logo">
-                  <i></i>
-                  <i></i>
-                  <i></i>
-                </div>
-              </div>
+            <div class="showcase-badge showcase-badge-bottom">
+              <strong>Web + estrategia</strong>
+              <span>no solo una plantilla</span>
             </div>
+          </figure>
+        </div>
+      </div>
 
-            <div class="preview-service-grid">
-              <article>
-                <span>▣</span>
-                <h3>Diseño a medida</h3>
-                <p>Diseños únicos que reflejan la identidad de tu marca.</p>
-              </article>
-
-              <article>
-                <span>✦</span>
-                <h3>Rendimiento superior</h3>
-                <p>Velocidad optimizada para una mejor experiencia.</p>
-              </article>
-
-              <article>
-                <span>◇</span>
-                <h3>Enfoque en resultados</h3>
-                <p>Sitios pensados para convertir visitantes en clientes.</p>
-              </article>
-            </div>
-          </div>
+      <div class="container">
+        <div class="trust-strip reveal" aria-label="Incluido en el servicio">
+          <span>Estrategia de contenido</span>
+          <span>Diseño responsive</span>
+          <span>Velocidad optimizada</span>
+          <span>Contacto por WhatsApp</span>
         </div>
       </div>
 
@@ -230,6 +239,84 @@
       </div>
     </section>
 
+    <section class="section proof-section" id="confianza">
+      <div class="container proof-grid">
+        <div class="section-heading reveal">
+          <span class="section-kicker">RESULTADOS</span>
+          <h2>Una web que no solo se ve bien: ayuda a vender mejor</h2>
+          <p>
+            El cliente no debería adivinar qué haces, cuánto vales o cómo contactarte.
+            Cada sección se diseña para responder rápido y llevarlo al próximo paso.
+          </p>
+        </div>
+
+        <div class="proof-cards">
+          <article class="proof-card reveal">
+            <strong>Contacto directo</strong>
+            <span>Botones conectados a WhatsApp con mensajes listos para que el cliente no piense de más.</span>
+          </article>
+
+          <article class="proof-card reveal">
+            <strong>Oferta más clara</strong>
+            <span>Textos ordenados para explicar tus servicios, precios base, beneficios y forma de trabajo.</span>
+          </article>
+
+          <article class="proof-card reveal">
+            <strong>Confianza visual</strong>
+            <span>Diseño moderno, limpio y consistente para que tu negocio no parezca improvisado.</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section deliverables-section">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="section-kicker">QUÉ RECIBES</span>
+          <h2>Todo lo necesario para salir con una presencia profesional</h2>
+          <p>La idea es que termines con una página clara, publicada y lista para compartir con clientes.</p>
+        </div>
+
+        <div class="deliverables-grid">
+          <article class="deliverable-card reveal">
+            <span>01</span>
+            <h3>Estructura comercial</h3>
+            <p>Organizo la información para que el visitante entienda tu negocio rápido y llegue al contacto.</p>
+          </article>
+
+          <article class="deliverable-card reveal">
+            <span>02</span>
+            <h3>Diseño adaptado a tu marca</h3>
+            <p>Colores, secciones, ritmo visual y estilo pensados para el tipo de negocio que quieres mostrar.</p>
+          </article>
+
+          <article class="deliverable-card reveal">
+            <span>03</span>
+            <h3>Web responsive</h3>
+            <p>Se ve bien en celular, tablet y computadora, cuidando botones, textos e imágenes.</p>
+          </article>
+
+          <article class="deliverable-card reveal">
+            <span>04</span>
+            <h3>Contacto conectado</h3>
+            <p>WhatsApp, correo, Instagram o formulario con mensajes listos para recibir solicitudes.</p>
+          </article>
+
+          <article class="deliverable-card reveal">
+            <span>05</span>
+            <h3>Optimización básica</h3>
+            <p>Imágenes livianas, título, descripción, favicon y base técnica para compartir mejor.</p>
+          </article>
+
+          <article class="deliverable-card reveal">
+            <span>06</span>
+            <h3>Acompañamiento final</h3>
+            <p>Revisión de detalles, ajustes visuales y guía para usar la página después de la entrega.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="section section-dark" id="proyecto">
       <div class="container split-grid">
         <div class="section-copy reveal">
@@ -252,29 +339,22 @@
           <a href="#contacto" class="btn btn-primary">Solicitar propuesta</a>
         </div>
 
-        <div class="project-card reveal">
-          <div class="mini-window">
-            <div class="mini-window-top">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
+        <div class="portfolio-stack reveal">
+          <figure class="portfolio-shot portfolio-shot-main">
+            <img src="portfolio-weblab-showcase.jpg" alt="Vista de una página web de Andres WebLab en una laptop" loading="lazy" />
+            <figcaption>
+              <strong>Presentación premium</strong>
+              <span>Hero claro, servicios visibles y llamada a la acción directa.</span>
+            </figcaption>
+          </figure>
 
-            <div class="mini-window-body">
-              <div class="mini-logo">
-                <span class="logo-mark" aria-hidden="true">
-                  <i></i>
-                  <i></i>
-                  <i></i>
-                </span>
-              </div>
-
-              <h3>Tu negocio con presencia profesional</h3>
-              <p>
-                Una página visual, rápida y lista para convertir visitas en clientes.
-              </p>
-            </div>
-          </div>
+          <figure class="portfolio-shot">
+            <img src="portfolio-local-business.jpg" alt="Ejemplo de landing page para negocio local en una laptop" loading="lazy" />
+            <figcaption>
+              <strong>Negocio local</strong>
+              <span>Estructura pensada para reservas, servicios y contacto rápido.</span>
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -283,32 +363,32 @@
       <div class="container">
         <div class="section-heading reveal">
           <span class="section-kicker">PROCESO</span>
-          <h2>Así convierto tu idea en una página profesional</h2>
+          <h2>Un proceso simple para pasar de idea a página lista</h2>
         </div>
 
         <div class="timeline">
           <article class="timeline-card reveal">
             <span>01</span>
-            <h3>Definimos la meta</h3>
-            <p>Vemos qué necesita tu negocio y qué acción quieres que tome el cliente.</p>
+            <h3>Diagnóstico rápido</h3>
+            <p>Vemos tu negocio, tu cliente ideal y la acción principal que quieres conseguir.</p>
           </article>
 
           <article class="timeline-card reveal">
             <span>02</span>
-            <h3>Diseño la estructura</h3>
-            <p>Organizo el contenido para que se entienda rápido y se vea premium.</p>
+            <h3>Contenido y estructura</h3>
+            <p>Definimos secciones, mensajes, servicios y fotos para que la web tenga intención.</p>
           </article>
 
           <article class="timeline-card reveal">
             <span>03</span>
-            <h3>Desarrollo la web</h3>
-            <p>Construyo una página rápida, elegante y adaptable a cualquier pantalla.</p>
+            <h3>Diseño y desarrollo</h3>
+            <p>Construyo una página rápida, moderna y adaptable a cualquier pantalla.</p>
           </article>
 
           <article class="timeline-card reveal">
             <span>04</span>
-            <h3>Entrega final</h3>
-            <p>Se revisan detalles, se conecta el contacto y queda lista para usar.</p>
+            <h3>Revisión y entrega</h3>
+            <p>Ajustamos detalles, conectamos el contacto y queda lista para compartir.</p>
           </article>
         </div>
       </div>
@@ -318,12 +398,13 @@
       <div class="container">
         <div class="section-heading reveal">
           <span class="section-kicker">PAQUETES</span>
-          <h2>Opciones para presentar mejor tu negocio</h2>
-          <p>Elige una base según el nivel que necesita tu marca.</p>
+          <h2>Elige el nivel que necesita tu negocio ahora</h2>
+          <p>Los precios son una base. Cada proyecto se ajusta según contenido, secciones y funcionalidades.</p>
         </div>
 
         <div class="packages-grid">
           <article class="package-card reveal">
+            <span class="package-meta">Inicio rápido</span>
             <h3>Landing básica</h3>
             <p>Para negocios que necesitan presencia clara y contacto rápido.</p>
             <div class="price">RD$10,000 <small>desde</small></div>
@@ -334,10 +415,21 @@
               <li>Botón directo a WhatsApp.</li>
               <li>Diseño responsive.</li>
             </ul>
+
+            <a
+              href="https://wa.me/18098937371"
+              class="btn btn-secondary btn-full package-cta"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-whatsapp-message="Hola, quiero información del paquete Landing básica."
+            >
+              Quiero este paquete
+            </a>
           </article>
 
           <article class="package-card featured reveal">
             <div class="badge">Más recomendado</div>
+            <span class="package-meta">Mejor balance</span>
             <h3>Web negocio premium</h3>
             <p>Para marcas que quieren verse más sólidas y vender mejor.</p>
             <div class="price">RD$18,000 <small>desde</small></div>
@@ -348,9 +440,20 @@
               <li>Contacto completo.</li>
               <li>Estructura comercial.</li>
             </ul>
+
+            <a
+              href="https://wa.me/18098937371"
+              class="btn btn-primary btn-full package-cta"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-whatsapp-message="Hola, quiero información del paquete Web negocio premium."
+            >
+              Quiero este paquete
+            </a>
           </article>
 
           <article class="package-card reveal">
+            <span class="package-meta">Para crecer</span>
             <h3>Catálogo digital</h3>
             <p>Para mostrar productos o servicios de forma más amplia.</p>
             <div class="price">RD$25,000 <small>desde</small></div>
@@ -361,6 +464,48 @@
               <li>Botones directos a WhatsApp.</li>
               <li>Base lista para crecer.</li>
             </ul>
+
+            <a
+              href="https://wa.me/18098937371"
+              class="btn btn-secondary btn-full package-cta"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-whatsapp-message="Hola, quiero información del paquete Catálogo digital."
+            >
+              Quiero este paquete
+            </a>
+          </article>
+
+          <article class="package-card custom-package reveal">
+            <div class="custom-package__copy">
+              <span class="package-meta">Servicio personalizado</span>
+              <h3>Proyecto a medida</h3>
+              <p>
+                Para negocios que necesitan algo más específico que una landing o catálogo:
+                una estructura especial, más secciones, integraciones o una experiencia hecha a la medida.
+              </p>
+            </div>
+
+            <ul class="check-list">
+              <li>Diagnóstico del objetivo y tipo de cliente.</li>
+              <li>Estructura personalizada según tu negocio.</li>
+              <li>Funciones o secciones especiales según alcance.</li>
+              <li>Propuesta clara antes de comenzar.</li>
+            </ul>
+
+            <div class="custom-package__action">
+              <div class="price custom-price">A cotizar <small>según el alcance</small></div>
+
+              <a
+                href="https://wa.me/18098937371"
+                class="btn btn-primary btn-full package-cta"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-whatsapp-message="Hola, quiero cotizar un servicio personalizado para mi negocio."
+              >
+                Cotizar a medida
+              </a>
+            </div>
           </article>
         </div>
       </div>
@@ -392,6 +537,21 @@
           <details>
             <summary>¿Se puede adaptar a mi marca?</summary>
             <p>Sí. Se puede adaptar a barberías, tiendas, salones, marcas personales y más.</p>
+          </details>
+
+          <details>
+            <summary>¿Cuánto tarda una página?</summary>
+            <p>Depende del alcance, pero una landing o web de negocio suele tomar entre 7 y 14 días después de definir el contenido.</p>
+          </details>
+
+          <details>
+            <summary>¿Qué necesito para empezar?</summary>
+            <p>Una idea clara del negocio, servicios, fotos si tienes, datos de contacto y referencias visuales si quieres un estilo específico.</p>
+          </details>
+
+          <details>
+            <summary>¿Puedo pedir un servicio personalizado?</summary>
+            <p>Sí. Si necesitas una web con estructura, secciones o funciones especiales, se revisa el alcance y se prepara una cotización a medida.</p>
           </details>
         </div>
       </div>
@@ -487,7 +647,7 @@
     rel="noopener noreferrer"
     aria-label="Escribir por WhatsApp"
   >
-    WhatsApp
+    <span class="whatsapp-float__text">WhatsApp</span>
   </a>
 </body>
 </html>
