@@ -181,7 +181,7 @@ img {
 .desktop-nav {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: clamp(10px, 1.35vw, 24px);
 }
 
 .desktop-nav a {
@@ -783,7 +783,7 @@ img {
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
 }
 
@@ -916,6 +916,29 @@ img {
   border-top: 3px solid var(--blue-2);
   border-right: 3px solid var(--blue-2);
   transform: rotate(35deg);
+}
+
+.icon-maintenance::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--blue-2);
+  border-radius: 50%;
+}
+
+.icon-maintenance::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  width: 14px;
+  height: 8px;
+  border-left: 3px solid var(--blue-2);
+  border-bottom: 3px solid var(--blue-2);
+  transform: rotate(-45deg);
 }
 
 .service-card h3 {
@@ -1306,6 +1329,44 @@ img {
   margin-top: auto;
 }
 
+/* MAINTENANCE */
+.maintenance-section {
+  background:
+    linear-gradient(180deg, rgba(41, 211, 152, 0.035), rgba(255, 255, 255, 0.006));
+  border-top: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.maintenance-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr) minmax(0, 0.95fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.maintenance-overview {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(41, 211, 152, 0.16), transparent 34%),
+    radial-gradient(circle at 95% 20%, rgba(22, 131, 255, 0.13), transparent 32%),
+    rgba(5, 15, 27, 0.92);
+  border-color: rgba(41, 211, 152, 0.24);
+}
+
+.maintenance-note {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 18px 22px;
+  border-radius: 16px;
+  color: var(--muted);
+  background: rgba(5, 15, 27, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.maintenance-note strong {
+  flex-shrink: 0;
+  color: #fff;
+}
+
 /* FAQ */
 .faq-list {
   padding: 10px 22px;
@@ -1500,7 +1561,8 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 
-  .packages-grid {
+  .packages-grid,
+  .maintenance-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1658,6 +1720,10 @@ textarea:focus {
   .deliverables-grid,
   .form-row {
     grid-template-columns: 1fr;
+  }
+
+  .maintenance-note {
+    display: grid;
   }
 
   .proof-section {
