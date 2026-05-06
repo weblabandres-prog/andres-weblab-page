@@ -1,7 +1,7 @@
 const WHATSAPP_NUMBER = "18296431565";
 
 const DEFAULT_WHATSAPP_MESSAGE =
-  "Hola, vi tu página web y quiero información sobre una página web para mi negocio.";
+  "Hola, vi tu página web y quiero información sobre diseño web o mantenimiento para mi negocio.";
 
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.body;
