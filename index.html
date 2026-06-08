@@ -1,765 +1,385 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+/* =========================================================
+   Andres WebLab \u00b7 app.js
+   Sitio est\u00e1tico interactivo con cotizador y CTAs WhatsApp.
+   ========================================================= */
 
-  <title>Andres WebLab | Diseño web, hosting y mantenimiento</title>
+const WHATSAPP_NUMBER = "18296431565";
 
-  <meta name="description" content="Diseño web profesional, landing pages, catálogos digitales, hosting básico y mantenimiento mensual para negocios en República Dominicana." />
-  <meta name="theme-color" content="#03070d" />
-  <meta name="author" content="Jonathan Andres" />
-  <meta name="robots" content="index, follow" />
-  <meta name="format-detection" content="telephone=no" />
+const DEFAULT_WHATSAPP_MESSAGE =
+  "Hola, vi tu p\u00e1gina web y quiero informaci\u00f3n sobre dise\u00f1o web o mantenimiento para mi negocio.";
 
-  <meta property="og:title" content="Andres WebLab | Diseño web, hosting y mantenimiento" />
-  <meta property="og:description" content="Páginas web modernas, rápidas y preparadas para recibir clientes por WhatsApp, con mantenimiento y hosting opcional." />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="es_DO" />
-  <meta property="og:image" content="portfolio-weblab-showcase.jpg" />
+const formatRD = (amount) => {
+  const rounded = Math.round(amount);
+  return "RD$" + rounded.toLocaleString("es-DO");
+};
 
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Andres WebLab | Diseño web, hosting y mantenimiento" />
-  <meta name="twitter:description" content="Diseño web profesional con mantenimiento, soporte técnico y hosting básico opcional para negocios." />
-  <meta name="twitter:image" content="portfolio-weblab-showcase.jpg" />
+const buildWhatsappUrl = (message) => {
+  const cleanNumber = WHATSAPP_NUMBER.replace(/\D/g, "");
+  return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
+};
 
-  <link rel="icon" href="logo.jfif" type="image/jpeg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="app.js" defer></script>
+// Mark JS as enabled so CSS can hide things only when JS is available
+document.documentElement.classList.add("js");
 
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "name": "Andres WebLab",
-      "description": "Diseño web profesional, landing pages, catálogos digitales, hosting básico y mantenimiento mensual para negocios.",
-      "email": "weblabandres@gmail.com",
-      "telephone": "+1-829-643-1565",
-      "areaServed": "República Dominicana",
-      "sameAs": ["https://instagram.com/andresweblab"]
+document.addEventListener("DOMContentLoaded", () => {
+  const body = document.body;
+  const header = document.querySelector(".header");
+  const scrollProgress = document.getElementById("scrollProgress");
+
+  const menuBtn = document.getElementById("menuBtn");
+  const closeMenuBtn = document.getElementById("closeMenu");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const mobilePanel = mobileMenu?.querySelector(".mobile-menu__panel");
+
+  const mobileLinks = document.querySelectorAll(".mobile-link, .mobile-menu .btn");
+  const desktopNavLinks = document.querySelectorAll(".desktop-nav a");
+  const allInternalLinks = document.querySelectorAll('a[href^="#"]');
+
+  const yearEl = document.getElementById("year");
+  const contactForm = document.getElementById("contactForm");
+  const whatsappFloat = document.querySelector(".whatsapp-float");
+  const whatsappIntentLinks = document.querySelectorAll("[data-whatsapp-message]");
+  const revealElements = document.querySelectorAll(".reveal");
+
+  const cotizadorForm = document.getElementById("cotizadorForm");
+  const summaryList = document.getElementById("summaryList");
+  const totalProjectEl = document.getElementById("totalProject");
+  const totalMonthlyEl = document.getElementById("totalMonthly");
+  const totalMonthlyRow = document.getElementById("totalMonthlyRow");
+  const sendQuoteBtn = document.getElementById("sendQuoteBtn");
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let lastFocusedElement = null;
+  let tickingScroll = false;
+
+  /* ---------------- Mobile menu ---------------- */
+  const isMenuOpen = () => mobileMenu?.classList.contains("is-open");
+
+  const openMenu = () => {
+    if (!mobileMenu || !menuBtn) return;
+    lastFocusedElement = document.activeElement;
+    mobileMenu.classList.add("is-open");
+    mobileMenu.setAttribute("aria-hidden", "false");
+    menuBtn.setAttribute("aria-expanded", "true");
+    body.classList.add("menu-open");
+    setTimeout(() => closeMenuBtn?.focus(), 80);
+  };
+
+  const closeMenu = () => {
+    if (!mobileMenu || !menuBtn) return;
+    mobileMenu.classList.remove("is-open");
+    mobileMenu.setAttribute("aria-hidden", "true");
+    menuBtn.setAttribute("aria-expanded", "false");
+    body.classList.remove("menu-open");
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+      lastFocusedElement.focus();
     }
-  </script>
-</head>
-
-<body>
-  <div class="page-bg" aria-hidden="true"></div>
-
-  <header class="header" id="top">
-    <div class="container nav">
-      <a href="#inicio" class="brand" aria-label="Ir al inicio">
-        <span class="logo-mark" aria-hidden="true">
-          <i></i>
-          <i></i>
-          <i></i>
-        </span>
-
-        <span class="brand-name">Andres WebLab</span>
-      </a>
-
-      <nav class="desktop-nav" aria-label="Navegación principal">
-        <a href="#inicio" class="is-active" aria-current="page">Inicio</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#proyecto">Proyectos</a>
-        <a href="#paquetes">Paquetes</a>
-        <a href="#mantenimiento">Mantenimiento</a>
-        <a href="#contacto">Contacto</a>
-      </nav>
-
-      <div class="nav-actions">
-        <a href="#contacto" class="nav-cta">Hablemos</a>
-
-        <button
-          class="menu-btn"
-          id="menuBtn"
-          type="button"
-          aria-label="Abrir menú"
-          aria-expanded="false"
-          aria-controls="mobileMenu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-
-    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-      <div class="mobile-menu__panel">
-        <div class="mobile-menu__top">
-          <a href="#inicio" class="brand">
-            <span class="logo-mark" aria-hidden="true">
-              <i></i>
-              <i></i>
-              <i></i>
-            </span>
-            <span class="brand-name">Andres WebLab</span>
-          </a>
-
-          <button class="close-btn" id="closeMenu" type="button" aria-label="Cerrar menú">
-            ✕
-          </button>
-        </div>
-
-        <nav class="mobile-menu__nav" aria-label="Navegación móvil">
-          <a href="#inicio" class="mobile-link">Inicio</a>
-          <a href="#servicios" class="mobile-link">Servicios</a>
-          <a href="#proyecto" class="mobile-link">Proyectos</a>
-          <a href="#confianza" class="mobile-link">Resultados</a>
-          <a href="#proceso" class="mobile-link">Proceso</a>
-          <a href="#paquetes" class="mobile-link">Paquetes</a>
-          <a href="#mantenimiento" class="mobile-link">Mantenimiento</a>
-          <a href="#faq" class="mobile-link">FAQ</a>
-          <a href="#contacto" class="mobile-link">Contacto</a>
-          <a href="#contacto" class="btn btn-primary btn-full">Hablemos</a>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero" id="inicio">
-      <div class="container hero-grid">
-        <div class="hero-content reveal">
-          <span class="eyebrow">DISEÑO WEB, HOSTING Y MANTENIMIENTO</span>
-
-          <h1>
-            Páginas web modernas que convierten visitas
-            <span>en clientes</span>
-          </h1>
-
-          <p>
-            Diseño, desarrollo y mantengo sitios claros, rápidos y listos para que tus clientes
-            entiendan lo que ofreces y te escriban por WhatsApp sin complicarse.
-          </p>
-
-          <div class="hero-actions">
-            <a href="#contacto" class="btn btn-primary">
-              Cotizar por WhatsApp
-              <span aria-hidden="true">→</span>
-            </a>
-
-            <a href="#paquetes" class="btn btn-secondary">
-              Ver paquetes
-            </a>
-          </div>
-
-          <div class="hero-features">
-            <span>Diseño + contenido</span>
-            <span>WhatsApp y formularios</span>
-            <span>Mantenimiento opcional</span>
-          </div>
-
-          <div class="hero-stats" aria-label="Puntos fuertes del servicio">
-            <article>
-              <strong>7-14</strong>
-              <span>días estimados de entrega</span>
-            </article>
-
-            <article>
-              <strong>RD$10k</strong>
-              <span>desde para iniciar</span>
-            </article>
-
-            <article>
-              <strong>Mensual</strong>
-              <span>soporte técnico opcional</span>
-            </article>
-          </div>
-        </div>
-
-        <div class="hero-visual reveal">
-          <figure class="hero-showcase">
-            <img src="portfolio-weblab-showcase.jpg" alt="Página web premium creada por Andres WebLab mostrada en una laptop" />
-
-            <figcaption>
-              <strong>Diseño premium con estructura comercial</strong>
-              <span>Contenido claro, botones visibles y experiencia adaptable a celular.</span>
-            </figcaption>
-
-            <div class="showcase-badge showcase-badge-top">
-              <strong>WhatsApp</strong>
-              <span>contacto listo</span>
-            </div>
-
-            <div class="showcase-badge showcase-badge-bottom">
-              <strong>Web + soporte</strong>
-              <span>sin dejarte solo después</span>
-            </div>
-          </figure>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="trust-strip reveal" aria-label="Incluido en el servicio">
-          <span>Estructura comercial</span>
-          <span>Diseño responsive</span>
-          <span>Hosting opcional</span>
-          <span>Contacto por WhatsApp</span>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="services-intro reveal" id="servicios">
-          <span>SERVICIOS</span>
-          <h2>
-            Todo lo necesario para lanzar,<br />
-            mejorar y cuidar tu web
-          </h2>
-        </div>
-
-        <div class="services-grid">
-          <article class="service-card reveal">
-            <div class="service-icon icon-web"></div>
-            <h3>Sitios web para negocios</h3>
-            <p>Presencia profesional para explicar tus servicios, generar confianza y recibir solicitudes.</p>
-          </article>
-
-          <article class="service-card reveal">
-            <div class="service-icon icon-landing"></div>
-            <h3>Landing pages</h3>
-            <p>Páginas enfocadas en una oferta clara, una acción principal y contacto rápido.</p>
-          </article>
-
-          <article class="service-card reveal">
-            <div class="service-icon icon-shop"></div>
-            <h3>Catálogos digitales</h3>
-            <p>Productos o servicios organizados para vender por WhatsApp sin una tienda compleja.</p>
-          </article>
-
-          <article class="service-card reveal">
-            <div class="service-icon icon-redesign"></div>
-            <h3>Rediseño web</h3>
-            <p>Actualizo una página existente con mejor imagen, estructura y experiencia en celular.</p>
-          </article>
-
-          <article class="service-card reveal">
-            <div class="service-icon icon-maintenance"></div>
-            <h3>Mantenimiento web</h3>
-            <p>Soporte, backups, actualizaciones y hosting básico para mantener la página estable.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section proof-section" id="confianza">
-      <div class="container proof-grid">
-        <div class="section-heading reveal">
-          <span class="section-kicker">RESULTADOS</span>
-          <h2>Una web profesional debe verse bien y facilitar la decisión</h2>
-          <p>
-            El cliente no debería adivinar qué haces, por qué confiar en ti o cómo contactarte.
-            Cada sección se ordena para responder rápido y llevarlo al próximo paso.
-          </p>
-        </div>
-
-        <div class="proof-cards">
-          <article class="proof-card reveal">
-            <strong>Contacto directo</strong>
-            <span>Botones conectados a WhatsApp con mensajes listos para reducir fricción.</span>
-          </article>
-
-          <article class="proof-card reveal">
-            <strong>Oferta más clara</strong>
-            <span>Textos ordenados para explicar servicios, beneficios, precios base y forma de trabajo.</span>
-          </article>
-
-          <article class="proof-card reveal">
-            <strong>Confianza visual</strong>
-            <span>Diseño moderno, limpio y consistente para que tu negocio se sienta serio desde el primer vistazo.</span>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section deliverables-section">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-kicker">QUÉ RECIBES</span>
-          <h2>Una entrega completa, lista para publicar y compartir</h2>
-          <p>El objetivo es que salgas con una página clara, rápida y preparada para recibir clientes.</p>
-        </div>
-
-        <div class="deliverables-grid">
-          <article class="deliverable-card reveal">
-            <span>01</span>
-            <h3>Estructura comercial</h3>
-            <p>Información organizada para que el visitante entienda tu negocio rápido y llegue al contacto.</p>
-          </article>
-
-          <article class="deliverable-card reveal">
-            <span>02</span>
-            <h3>Diseño adaptado a tu marca</h3>
-            <p>Colores, secciones y ritmo visual pensados para el tipo de negocio que quieres mostrar.</p>
-          </article>
-
-          <article class="deliverable-card reveal">
-            <span>03</span>
-            <h3>Web responsive</h3>
-            <p>Se ve bien en celular, tablet y computadora, cuidando botones, textos e imágenes.</p>
-          </article>
-
-          <article class="deliverable-card reveal">
-            <span>04</span>
-            <h3>Contacto conectado</h3>
-            <p>WhatsApp, correo, Instagram o formulario con mensajes listos para recibir solicitudes.</p>
-          </article>
-
-          <article class="deliverable-card reveal">
-            <span>05</span>
-            <h3>Optimización básica</h3>
-            <p>Imágenes livianas, título, descripción, favicon y base técnica para compartir mejor.</p>
-          </article>
-
-          <article class="deliverable-card reveal">
-            <span>06</span>
-            <h3>Acompañamiento final</h3>
-            <p>Revisión de detalles, ajustes visuales y guía para usar la página después de la entrega.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-dark" id="proyecto">
-      <div class="container split-grid">
-        <div class="section-copy reveal">
-          <span class="section-kicker">PROYECTOS</span>
-
-          <h2>Diseños elegantes, claros y listos para vender</h2>
-
-          <p>
-            Cada página se construye con una estructura clara, una imagen visual fuerte
-            y botones visibles para que el cliente pueda escribir, reservar o cotizar sin complicarse.
-          </p>
-
-          <ul class="check-list">
-            <li>Diseño moderno con estilo premium.</li>
-            <li>Experiencia cuidada en celular, tablet y laptop.</li>
-            <li>Texto claro para explicar tu oferta sin confundir.</li>
-            <li>Botones conectados a WhatsApp o formulario.</li>
-          </ul>
-
-          <a href="#contacto" class="btn btn-primary">Solicitar propuesta</a>
-        </div>
-
-        <div class="portfolio-stack reveal">
-          <figure class="portfolio-shot portfolio-shot-main">
-            <img src="portfolio-weblab-showcase.jpg" alt="Vista de una página web de Andres WebLab en una laptop" loading="lazy" />
-            <figcaption>
-              <strong>Presentación premium</strong>
-              <span>Hero claro, servicios visibles y llamada a la acción directa.</span>
-            </figcaption>
-          </figure>
-
-          <figure class="portfolio-shot">
-            <img src="portfolio-local-business.jpg" alt="Ejemplo de landing page para negocio local en una laptop" loading="lazy" />
-            <figcaption>
-              <strong>Negocio local</strong>
-              <span>Estructura pensada para reservas, servicios y contacto rápido.</span>
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="proceso">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-kicker">PROCESO</span>
-          <h2>Un proceso ordenado para pasar de idea a página lista</h2>
-        </div>
-
-        <div class="timeline">
-          <article class="timeline-card reveal">
-            <span>01</span>
-            <h3>Diagnóstico rápido</h3>
-            <p>Revisamos tu negocio, cliente ideal y la acción principal que quieres conseguir.</p>
-          </article>
-
-          <article class="timeline-card reveal">
-            <span>02</span>
-            <h3>Contenido y estructura</h3>
-            <p>Definimos secciones, mensajes, servicios y fotos para que la web tenga intención.</p>
-          </article>
-
-          <article class="timeline-card reveal">
-            <span>03</span>
-            <h3>Diseño y desarrollo</h3>
-            <p>Construyo una página rápida, moderna y adaptable a cualquier pantalla.</p>
-          </article>
-
-          <article class="timeline-card reveal">
-            <span>04</span>
-            <h3>Revisión y entrega</h3>
-            <p>Ajustamos detalles, conectamos el contacto y queda lista para compartir.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-dark" id="paquetes">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-kicker">PAQUETES</span>
-          <h2>Paquetes claros para empezar sin adivinar el presupuesto</h2>
-          <p>Los precios son una base. Cada proyecto puede ajustarse según contenido, secciones, urgencia y funcionalidades.</p>
-        </div>
-
-        <div class="packages-grid">
-          <article class="package-card reveal">
-            <span class="package-meta">Inicio rápido</span>
-            <h3>Landing básica</h3>
-            <p>Para negocios que necesitan presencia clara, una oferta principal y contacto rápido.</p>
-            <div class="price">RD$10,000 <small>desde</small></div>
-
-            <ul class="check-list">
-              <li>Sección principal profesional.</li>
-              <li>Servicios y contacto.</li>
-              <li>Botón directo a WhatsApp.</li>
-              <li>Diseño responsive.</li>
-            </ul>
-
-            <a
-              href="https://wa.me/18296431565"
-              class="btn btn-secondary btn-full package-cta"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-whatsapp-message="Hola, quiero información del paquete Landing básica."
-            >
-              Quiero este paquete
-            </a>
-          </article>
-
-          <article class="package-card featured reveal">
-            <div class="badge">Más recomendado</div>
-            <span class="package-meta">Mejor balance</span>
-            <h3>Web negocio premium</h3>
-            <p>Para marcas que quieren una página más completa, confiable y preparada para vender mejor.</p>
-            <div class="price">RD$18,000 <small>desde</small></div>
-
-            <ul class="check-list">
-              <li>Inicio con diseño premium.</li>
-              <li>Servicios, beneficios y FAQ.</li>
-              <li>Contacto completo.</li>
-              <li>Estructura comercial.</li>
-            </ul>
-
-            <a
-              href="https://wa.me/18296431565"
-              class="btn btn-primary btn-full package-cta"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-whatsapp-message="Hola, quiero información del paquete Web negocio premium."
-            >
-              Quiero este paquete
-            </a>
-          </article>
-
-          <article class="package-card reveal">
-            <span class="package-meta">Para crecer</span>
-            <h3>Catálogo digital</h3>
-            <p>Para mostrar productos o servicios de forma más amplia y recibir pedidos por WhatsApp.</p>
-            <div class="price">RD$25,000 <small>desde</small></div>
-
-            <ul class="check-list">
-              <li>Categorías visuales.</li>
-              <li>Productos organizados.</li>
-              <li>Botones directos a WhatsApp.</li>
-              <li>Base lista para crecer.</li>
-            </ul>
-
-            <a
-              href="https://wa.me/18296431565"
-              class="btn btn-secondary btn-full package-cta"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-whatsapp-message="Hola, quiero información del paquete Catálogo digital."
-            >
-              Quiero este paquete
-            </a>
-          </article>
-
-          <article class="package-card custom-package reveal">
-            <div class="custom-package__copy">
-              <span class="package-meta">Servicio personalizado</span>
-            <h3>Proyecto a medida</h3>
-            <p>
-              Para negocios que necesitan algo más específico que una landing o catálogo:
-              una estructura especial, más secciones, integraciones o una experiencia hecha a la medida.
-            </p>
-            </div>
-
-            <ul class="check-list">
-              <li>Diagnóstico del objetivo y tipo de cliente.</li>
-              <li>Estructura personalizada según tu negocio.</li>
-              <li>Funciones o secciones especiales según alcance.</li>
-              <li>Propuesta clara antes de comenzar.</li>
-            </ul>
-
-            <div class="custom-package__action">
-              <div class="price custom-price">A cotizar <small>según el alcance</small></div>
-
-              <a
-                href="https://wa.me/18296431565"
-                class="btn btn-primary btn-full package-cta"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-whatsapp-message="Hola, quiero cotizar un servicio personalizado para mi negocio."
-              >
-                Cotizar a medida
-              </a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section maintenance-section" id="mantenimiento">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-kicker">MANTENIMIENTO WEB</span>
-          <h2>Tu página puede quedar cuidada después de publicarla</h2>
-          <p>
-            Soporte técnico mensual para mantener tu web estable, actualizada y lista para representar bien a tu negocio.
-          </p>
-        </div>
-
-        <div class="maintenance-grid">
-          <article class="package-card maintenance-overview reveal">
-            <span class="package-meta">Soporte continuo</span>
-            <h3>Mantenimiento web profesional</h3>
-            <p>
-              Ideal para páginas existentes o proyectos nuevos que necesitan la parte técnica organizada desde el inicio.
-            </p>
-
-            <ul class="check-list">
-              <li>Revisión mensual de la página.</li>
-              <li>Backups preventivos.</li>
-              <li>Corrección de errores pequeños.</li>
-              <li>Soporte básico por WhatsApp.</li>
-            </ul>
-
-            <a
-              href="https://wa.me/18296431565"
-              class="btn btn-secondary btn-full package-cta"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-whatsapp-message="Hola, quiero información sobre mantenimiento web para mi página."
-            >
-              Consultar mantenimiento
-            </a>
-          </article>
-
-          <article class="package-card reveal">
-            <span class="package-meta">Para web activa</span>
-            <h3>Mantenimiento básico</h3>
-            <p>Para clientes que ya tienen hosting funcionando y quieren soporte mensual.</p>
-            <div class="price">RD$2,500 <small>/ mensual</small></div>
-
-            <ul class="check-list">
-              <li>Actualizaciones básicas cuando aplique.</li>
-              <li>Backup mensual preventivo.</li>
-              <li>Hasta 2 cambios simples al mes.</li>
-              <li>Revisión de enlaces y formularios.</li>
-            </ul>
-
-            <a
-              href="https://wa.me/18296431565"
-              class="btn btn-secondary btn-full package-cta"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-whatsapp-message="Hola, quiero información del plan Mantenimiento básico."
-            >
-              Quiero este plan
-            </a>
-          </article>
-
-          <article class="package-card featured reveal">
-            <div class="badge">Recomendado</div>
-            <span class="package-meta">Todo configurado</span>
-            <h3>Mantenimiento + Hosting</h3>
-            <p>Para entregar la parte técnica configurada y lista para usar.</p>
-            <div class="price">RD$3,500 <small>/ mensual</small></div>
-
-            <ul class="check-list">
-              <li>Todo lo incluido en el plan básico.</li>
-              <li>Hosting básico para la página web.</li>
-              <li>Configuración de SSL cuando aplique.</li>
-              <li>Configuración básica de dominio y DNS.</li>
-            </ul>
-
-            <a
-              href="https://wa.me/18296431565"
-              class="btn btn-primary btn-full package-cta"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-whatsapp-message="Hola, quiero información del plan Mantenimiento + Hosting configurado."
-            >
-              Quiero este plan
-            </a>
-          </article>
-        </div>
-
-        <div class="maintenance-note reveal">
-          <strong>Importante:</strong>
-          <span>
-            Dominio anual, correos corporativos, licencias, urgencias, migraciones completas, rediseños, funciones nuevas y limpieza de malware se cotizan aparte. Configuración inicial compleja desde RD$2,500 cuando aplique.
-          </span>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="faq">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-kicker">FAQ</span>
-          <h2>Preguntas frecuentes</h2>
-        </div>
-
-        <div class="faq-list reveal">
-          <details>
-            <summary>¿La página se verá bien en celular?</summary>
-            <p>Sí. El diseño se trabaja primero pensando en una experiencia clara en celular, tablet y computadora.</p>
-          </details>
-
-          <details>
-            <summary>¿Puede conectarse a WhatsApp?</summary>
-            <p>Sí. Los botones y formularios pueden abrir WhatsApp con un mensaje listo para enviar.</p>
-          </details>
-
-          <details>
-            <summary>¿Sirve para un negocio pequeño?</summary>
-            <p>Sí. Una web clara ayuda a que un negocio local se vea más confiable y reciba solicitudes con menos fricción.</p>
-          </details>
-
-          <details>
-            <summary>¿Se puede adaptar a mi marca?</summary>
-            <p>Sí. Se puede adaptar a barberías, tiendas, salones, marcas personales, servicios profesionales y más.</p>
-          </details>
-
-          <details>
-            <summary>¿Cuánto tarda una página?</summary>
-            <p>Depende del alcance, pero una landing o web de negocio suele tomar entre 7 y 14 días después de definir el contenido.</p>
-          </details>
-
-          <details>
-            <summary>¿Qué necesito para empezar?</summary>
-            <p>Una idea clara del negocio, servicios, fotos si tienes, datos de contacto y referencias visuales si quieres un estilo específico.</p>
-          </details>
-
-          <details>
-            <summary>¿Puedo pedir un servicio personalizado?</summary>
-            <p>Sí. Si necesitas una web con estructura, secciones o funciones especiales, se revisa el alcance y se prepara una cotización a medida.</p>
-          </details>
-
-          <details>
-            <summary>¿Ofreces mantenimiento después de entregar la página?</summary>
-            <p>Sí. Hay planes mensuales para revisión, backups, actualizaciones básicas, cambios pequeños, soporte por WhatsApp y hosting básico opcional.</p>
-          </details>
-
-          <details>
-            <summary>¿El dominio y los correos están incluidos?</summary>
-            <p>No por defecto. Dominio, correos corporativos, licencias y servicios externos se cotizan aparte para que el alcance quede claro desde el inicio.</p>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-dark" id="contacto">
-      <div class="container contact-grid">
-        <div class="section-copy reveal">
-          <span class="section-kicker">CONTACTO</span>
-
-          <h2>Cuéntame qué necesitas y te respondo con una propuesta clara</h2>
-
-          <p>
-            Puedes escribirme para una página nueva, rediseño, catálogo digital o mantenimiento mensual.
-            Revisamos el alcance y te digo la mejor forma de empezar.
-          </p>
-
-          <div class="contact-tags">
-            <span>Diseño personalizado</span>
-            <span>Mantenimiento web</span>
-            <span>Atención directa</span>
-            <span>Propuesta clara</span>
-          </div>
-
-          <address class="contact-info">
-            <a href="mailto:weblabandres@gmail.com">weblabandres@gmail.com</a>
-            <a href="https://wa.me/18296431565" target="_blank" rel="noopener noreferrer">+1 (829) 643-1565</a>
-            <a href="https://instagram.com/andresweblab" target="_blank" rel="noopener noreferrer">@andresweblab</a>
-          </address>
-        </div>
-
-        <form class="contact-form reveal" id="contactForm">
-          <div class="form-row">
-            <label>
-              <span>Nombre</span>
-              <input type="text" name="name" placeholder="Tu nombre" required />
-            </label>
-
-            <label>
-              <span>WhatsApp</span>
-              <input type="tel" name="phone" placeholder="Tu número" required />
-            </label>
-          </div>
-
-          <div class="form-row">
-            <label>
-              <span>Correo</span>
-              <input type="email" name="email" placeholder="tunegocio@email.com" required />
-            </label>
-
-            <label>
-              <span>Tipo de proyecto</span>
-              <input type="text" name="projectType" placeholder="Landing, catálogo, rediseño, mantenimiento..." />
-            </label>
-          </div>
-
-          <label>
-            <span>Cuéntame tu idea</span>
-            <textarea name="message" placeholder="Necesito una web para mi negocio, quiero mejorar mi página actual o busco mantenimiento..." required></textarea>
-          </label>
-
-          <button type="submit" class="btn btn-primary btn-full">
-            Enviar por WhatsApp
-          </button>
-
-          <small>Al enviar, se abrirá WhatsApp con tu solicitud lista para mandar.</small>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <a href="#inicio" class="brand">
-        <span class="logo-mark" aria-hidden="true">
-          <i></i>
-          <i></i>
-          <i></i>
-        </span>
-
-        <span class="brand-name">Andres WebLab</span>
-      </a>
-
-      <div class="footer-right">
-        <span>Jonathan Andres</span>
-        <span>© <span id="year"></span> Andres WebLab</span>
-      </div>
-    </div>
-  </footer>
-
-  <a
-    class="whatsapp-float"
-    href="https://wa.me/18296431565?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20dise%C3%B1o%20web%20o%20mantenimiento"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Escribir por WhatsApp"
-  >
-    <span class="whatsapp-float__text">WhatsApp</span>
-  </a>
-</body>
-</html>
+  };
+
+  const trapFocusInsideMenu = (event) => {
+    if (!isMenuOpen() || event.key !== "Tab" || !mobilePanel) return;
+    const focusable = mobilePanel.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    }
+    if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  menuBtn?.addEventListener("click", () => (isMenuOpen() ? closeMenu() : openMenu()));
+  closeMenuBtn?.addEventListener("click", closeMenu);
+  mobileMenu?.addEventListener("click", (event) => {
+    if (event.target === mobileMenu) closeMenu();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && isMenuOpen()) closeMenu();
+    trapFocusInsideMenu(event);
+  });
+  mobileLinks.forEach((link) => link.addEventListener("click", closeMenu));
+
+  /* ---------------- Nav active state ---------------- */
+  const updateActiveNav = (sectionId) => {
+    desktopNavLinks.forEach((link) => {
+      const isActive = link.getAttribute("href") === `#${sectionId}`;
+      link.classList.toggle("is-active", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  /* ---------------- Smooth scroll ---------------- */
+  const smoothScrollTo = (target) => {
+    target.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
+  allInternalLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const targetId = link.getAttribute("href");
+      if (!targetId || targetId === "#") return;
+      const targetSection = document.querySelector(targetId);
+      if (!targetSection) return;
+      event.preventDefault();
+      smoothScrollTo(targetSection);
+      if (targetSection.id) {
+        history.pushState(null, "", `#${targetSection.id}`);
+        updateActiveNav(targetSection.id);
+      }
+      closeMenu();
+    });
+  });
+
+  /* ---------------- Year + WhatsApp float ---------------- */
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  if (whatsappFloat) {
+    whatsappFloat.href = buildWhatsappUrl(DEFAULT_WHATSAPP_MESSAGE);
+    whatsappFloat.target = "_blank";
+    whatsappFloat.rel = "noopener noreferrer";
+  }
+
+  whatsappIntentLinks.forEach((link) => {
+    const message = link.getAttribute("data-whatsapp-message");
+    if (!message) return;
+    link.href = buildWhatsappUrl(message);
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+
+  /* ---------------- Scroll progress + header state ---------------- */
+  const updateScrollState = () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    if (scrollProgress) scrollProgress.style.width = percent + "%";
+    header?.classList.toggle("is-scrolled", scrollTop > 24);
+    tickingScroll = false;
+  };
+
+  updateScrollState();
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (tickingScroll) return;
+      tickingScroll = true;
+      window.requestAnimationFrame(updateScrollState);
+    },
+    { passive: true }
+  );
+
+  /* ---------------- Contact form -> WhatsApp ---------------- */
+  contactForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(contactForm);
+    const name = String(formData.get("name") || "").trim();
+    const phone = String(formData.get("phone") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const projectType = String(formData.get("projectType") || "").trim();
+    const message = String(formData.get("message") || "").trim();
+
+    if (!name || !phone || !email || !message) {
+      contactForm.reportValidity();
+      return;
+    }
+
+    const whatsappMessage = [
+      "Hola, vi tu p\u00e1gina web y quiero una propuesta.",
+      "",
+      `Nombre: ${name}`,
+      `WhatsApp: ${phone}`,
+      `Correo: ${email}`,
+      `Tipo de proyecto: ${projectType || "No especificado"}`,
+      "",
+      "Idea del proyecto:",
+      message,
+    ].join("\n");
+
+    window.open(buildWhatsappUrl(whatsappMessage), "_blank", "noopener,noreferrer");
+    contactForm.reset();
+  });
+
+  /* ---------------- Reveal animations ---------------- */
+  if ("IntersectionObserver" in window && revealElements.length) {
+    const revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            // Slight stagger when several elements appear together
+            const delay = Math.min(index * 60, 240);
+            setTimeout(() => entry.target.classList.add("is-visible"), delay);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -60px 0px",
+      }
+    );
+    revealElements.forEach((el) => revealObserver.observe(el));
+  } else {
+    revealElements.forEach((el) => el.classList.add("is-visible"));
+  }
+
+  /* ---------------- Section active observer ---------------- */
+  const sections = Array.from(desktopNavLinks)
+    .map((link) => {
+      const href = link.getAttribute("href");
+      if (!href || !href.startsWith("#")) return null;
+      return document.getElementById(href.slice(1));
+    })
+    .filter(Boolean);
+
+  if ("IntersectionObserver" in window && sections.length && desktopNavLinks.length) {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible?.target?.id) updateActiveNav(visible.target.id);
+      },
+      {
+        threshold: [0.3, 0.6],
+        rootMargin: "-20% 0px -45% 0px",
+      }
+    );
+    sections.forEach((section) => sectionObserver.observe(section));
+  }
+
+  /* ---------------- COTIZADOR ---------------- */
+  if (cotizadorForm) {
+    const bumpAnimate = (el) => {
+      if (!el) return;
+      el.classList.remove("is-bumped");
+      // force reflow to re-trigger animation
+      void el.offsetWidth;
+      el.classList.add("is-bumped");
+    };
+
+    const updateQuote = (animate = false) => {
+      const formData = new FormData(cotizadorForm);
+      const baseInput = cotizadorForm.querySelector('input[name="base"]:checked');
+      const maintenanceInput = cotizadorForm.querySelector('input[name="maintenance"]:checked');
+      const urgencyInput = cotizadorForm.querySelector('input[name="urgency"]:checked');
+      const extrasInputs = cotizadorForm.querySelectorAll('input[name="extra"]:checked');
+
+      const basePrice = baseInput ? Number(baseInput.dataset.price) || 0 : 0;
+      const baseLabel = baseInput ? baseInput.value : "";
+
+      const extras = [];
+      let extrasTotal = 0;
+      extrasInputs.forEach((input) => {
+        const price = Number(input.dataset.price) || 0;
+        extrasTotal += price;
+        extras.push({ label: input.value, price });
+      });
+
+      const multiplier = urgencyInput ? Number(urgencyInput.dataset.multiplier) || 1 : 1;
+      const urgencyLabel = urgencyInput ? urgencyInput.value : "";
+
+      const monthly = maintenanceInput ? Number(maintenanceInput.dataset.monthly) || 0 : 0;
+      const maintenanceLabel = maintenanceInput ? maintenanceInput.value : "";
+
+      const subtotal = basePrice + extrasTotal;
+      const projectTotal = subtotal * multiplier;
+
+      // Build summary list
+      const items = [];
+      if (baseLabel) items.push(`<li><span>${baseLabel}</span><strong>${formatRD(basePrice)}</strong></li>`);
+      extras.forEach((extra) => {
+        items.push(`<li><span>+ ${extra.label}</span><strong>${formatRD(extra.price)}</strong></li>`);
+      });
+      if (multiplier > 1) {
+        const surcharge = subtotal * (multiplier - 1);
+        items.push(`<li><span>Entrega express (+20%)</span><strong>${formatRD(surcharge)}</strong></li>`);
+      }
+      if (monthly > 0) {
+        items.push(`<li><span>${maintenanceLabel}</span><strong>${formatRD(monthly)}/mes</strong></li>`);
+      }
+
+      if (summaryList) {
+        summaryList.innerHTML = items.length
+          ? items.join("")
+          : '<li class="summary-empty">A\u00fan no seleccionas nada</li>';
+      }
+
+      if (totalProjectEl) {
+        totalProjectEl.textContent = formatRD(projectTotal);
+        if (animate) bumpAnimate(totalProjectEl);
+      }
+
+      if (totalMonthlyRow && totalMonthlyEl) {
+        if (monthly > 0) {
+          totalMonthlyRow.hidden = false;
+          totalMonthlyEl.textContent = formatRD(monthly) + "/mes";
+          if (animate) bumpAnimate(totalMonthlyEl);
+        } else {
+          totalMonthlyRow.hidden = true;
+        }
+      }
+
+      // Store data on the send button for later use
+      sendQuoteBtn?.setAttribute("data-project-total", String(projectTotal));
+      sendQuoteBtn?.setAttribute("data-monthly", String(monthly));
+      sendQuoteBtn?.setAttribute("data-base", baseLabel);
+      sendQuoteBtn?.setAttribute("data-extras", JSON.stringify(extras.map((e) => e.label)));
+      sendQuoteBtn?.setAttribute("data-maintenance", maintenanceLabel);
+      sendQuoteBtn?.setAttribute("data-urgency", urgencyLabel);
+    };
+
+    cotizadorForm.addEventListener("change", () => updateQuote(true));
+    cotizadorForm.addEventListener("input", () => updateQuote(true));
+
+    updateQuote(false);
+
+    sendQuoteBtn?.addEventListener("click", () => {
+      const projectTotal = Number(sendQuoteBtn.getAttribute("data-project-total") || 0);
+      const monthly = Number(sendQuoteBtn.getAttribute("data-monthly") || 0);
+      const base = sendQuoteBtn.getAttribute("data-base") || "";
+      const extras = JSON.parse(sendQuoteBtn.getAttribute("data-extras") || "[]");
+      const maintenance = sendQuoteBtn.getAttribute("data-maintenance") || "";
+      const urgency = sendQuoteBtn.getAttribute("data-urgency") || "";
+
+      const lines = [
+        "Hola Andres, arm\u00e9 mi cotizaci\u00f3n desde la p\u00e1gina:",
+        "",
+        `\u2022 Tipo de proyecto: ${base}`,
+      ];
+
+      if (extras.length) {
+        lines.push("\u2022 Extras:");
+        extras.forEach((extra) => lines.push(`   - ${extra}`));
+      } else {
+        lines.push("\u2022 Extras: ninguno");
+      }
+
+      lines.push(`\u2022 Mantenimiento: ${maintenance}`);
+      lines.push(`\u2022 Entrega: ${urgency}`);
+      lines.push("");
+      lines.push(`Total estimado del proyecto: ${formatRD(projectTotal)}`);
+      if (monthly > 0) {
+        lines.push(`Mantenimiento mensual: ${formatRD(monthly)}/mes`);
+      }
+      lines.push("");
+      lines.push("Quisiera confirmar el alcance y los siguientes pasos. Gracias!");
+
+      const message = lines.join("\n");
+      window.open(buildWhatsappUrl(message), "_blank", "noopener,noreferrer");
+    });
+  }
+});
